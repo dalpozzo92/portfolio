@@ -22,6 +22,11 @@ import {
 import { motion } from 'framer-motion';
 
 const Hero = () => {
+
+    const getImagePath = (imageName) => {
+    return `${import.meta.env.BASE_URL}${imageName}`;
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -42,32 +47,27 @@ const Hero = () => {
     },
   };
 
-    const handleDownloadCV = () => {
-    // Crea un link per scaricare il CV
-    const link = document.createElement('a');
-    link.href = '/Dal-Pozzo-Nicola.pdf'; // Il CV deve essere nella cartella public
-    link.download = 'Dal-Pozzo-Nicola.pdf';
-    link.target = '_blank'; // Apre in una nuova tab come backup
-    
-    // Verifica se il file esiste
-    fetch('/Dal-Pozzo-Nicola.pdf')
-      .then(response => {
-        if (response.ok) {
-          // File trovato, procedi con il download
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        } else {
-          // File non trovato, mostra un messaggio
-          alert('CV non disponibile al momento. Contattami direttamente per riceverlo!');
-        }
-      })
-      .catch(error => {
-        console.error('Errore nel download del CV:', error);
-        // Fallback: apri in una nuova tab
-        window.open('/Dal-Pozzo-Nicola.pdf', '_blank');
-      });
-  };
+   const handleDownloadCV = () => {
+  const link = document.createElement('a');
+  link.href = `${import.meta.env.BASE_URL}Dal-Pozzo-Nicola.pdf`; // Con BASE_URL
+  link.download = 'Dal-Pozzo-Nicola.pdf';
+  link.target = '_blank';
+  
+  fetch(`${import.meta.env.BASE_URL}Dal-Pozzo-Nicola.pdf`)
+    .then(response => {
+      if (response.ok) {
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        alert('CV non disponibile al momento. Contattami direttamente per riceverlo!');
+      }
+    })
+    .catch(error => {
+      console.error('Errore nel download del CV:', error);
+      window.open(`${import.meta.env.BASE_URL}Dal-Pozzo-Nicola.pdf`, '_blank');
+    });
+};
 
   return (
     <Box
@@ -97,7 +97,7 @@ const Hero = () => {
                   border: '2px solid rgba(0, 188, 212, 0.3)',
                 }}
                 alt="Dal Pozzo Nicola"
-                src="/fotoprofilo.jpg"
+                src={getImagePath('fotoprofilo.jpg')} // Usa la funzione helper
               />
             </motion.div>
 
